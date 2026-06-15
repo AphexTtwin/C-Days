@@ -4,18 +4,20 @@
 #define INT_MAX 2147483647
 #define INT_MIN -2147483648
 #include <iostream>
-#include <string>
 
-class ScalarConverter //utility classes
+class ScalarConverter
 {
 private:
+
+public:
 	ScalarConverter();
 	ScalarConverter(const ScalarConverter &src);
 	ScalarConverter &operator=(const ScalarConverter &src);
 	~ScalarConverter();
 
-public:
-	static void convert(std::string const &literal);
+	static void convert(char *c);
 };
+
+
+
 #endif
-// Instantiation

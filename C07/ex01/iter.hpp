@@ -1,22 +1,15 @@
+#ifndef ITER_HPP
+#define ITER_HPP
+
 #include <iostream>
 
-
-template<typename T>
-void fun( T &elm)
+template<typename T, typename Func>
+void iter(T *array, const std::size_t len, Func f)
 {
-	std::cout << "the element " << elm << std::endl;
-}
-
-template<typename T>
-void mody(T &elm)
-{
-	elm = elm - 1;
-	std::cout << "the element " << elm << std::endl;
-}
-
-template<typename T>
-void iter(T *array,const int len, void (*f)(const T &))
-{
-	for (int i = 0; i < len; i++)
+	if (!array || !f || len <= 0)
+		return;
+	for (std::size_t i = 0; i < len; ++i)
 		f(array[i]);
 }
+
+#endif

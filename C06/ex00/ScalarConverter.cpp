@@ -1,6 +1,5 @@
 #include "ScalarConverter.hpp"
 #include <cstdlib>
-#include <cctype>
 
 ScalarConverter::ScalarConverter()
 {
@@ -21,9 +20,9 @@ ScalarConverter::~ScalarConverter()
 {
 }
 
-void handleSpecialCase(std::string s, double &value)
+void handleSpecialCase(std::string hsc, double &value)
 {
-	value = std::strtod(s.c_str(), NULL);
+	value = std::strtod(hsc.c_str(), NULL);
 }
 
 bool check_special_cases(std::string s, std::string special_Case[], double &value)
@@ -38,14 +37,29 @@ bool check_special_cases(std::string s, std::string special_Case[], double &valu
 	}
 	return false;
 }
+// Pseudo-literals" just means they're not real C++ literals, but you still need to handle them as special cases!
 
+// NaN can be:
+// Any undefined/imaginary result:
+// Mathematical operations:
+// cpp
+// 0.0 / 0.0        // Zero divided by zero
+// infinity - infinity
+// infinity * 0
+// sqrt(-1.0)       // Square root of negative
+// log(-1.0)        // Logarithm of negative
+// asin(2.0)        // Inverse sine out of range
 
-void ScalarConverter::convert(std::string const &literal)
+// double x = 0.0 / 0.0;  // This creates NaN
+// double y = sqrt(-1.0);  // Also creates NaN
+// Why? NaN is the only value in programming that doesn't equal itself. It's a special rule!
+void ScalarConverter::convert(char *str)
 {
-	std::string s = literal;
+	std::string s = str;
 	double value = 0.0;
 
-	if (s.length() == 1 && !std::isdigit(static_cast<unsigned char>(s[0])))
+
+	if (s.length() == 1)
 	{
 		char c = s[0];
 		if (isprint(c))
@@ -64,44 +78,27 @@ void ScalarConverter::convert(std::string const &literal)
 
 	bool isSpecial = check_special_cases(s, special_Case, value);
 
-	char *endptr;
-
 	if (!isSpecial)
 	{
-		endptr = NULL;
+		char *endptr;
 		value = std::strtod(s.c_str(), &endptr);
+		// if (*endptr == 'f')
+		// {
+		// }
+		// else if (*endptr != '\0' || endptr == s.c_str())
+		// {
+		// 	std::cout << "Invalide input: " << endptr << std::endl;
+		// 	return;
+		// }
 		std::string remaining(endptr);
-		if (!remaining.empty())
-		{
-			if ((remaining == "f" || remaining == "F") && s.find('.') != std::string::npos)
-			{
-			}
-			else
-			{
-				std::cout << "char: impossible"   << std::endl;
-				std::cout << "int: impossible"    << std::endl;
-				std::cout << "float: impossible"  << std::endl;
-				std::cout << "double: impossible" << std::endl;
-				return ;
-			}
-		}
-	}
 
-	else
-	{
-		value = std::strtod(s.c_str(), &endptr);
-		std::string remaining(endptr);
+		// If there's anything left AND it's not exactly "f" or "F"
 		if (!remaining.empty() && remaining != "f" && remaining != "F")
 		{
-			std::cout << "char: impossible"   << std::endl;
-			std::cout << "int: impossible"    << std::endl;
-			std::cout << "float: impossible"  << std::endl;
-			std::cout << "double: impossible" << std::endl;
+			std::cout << "Invalide input: " << endptr << std::endl;
 			return;
 		}
 	}
-
-
 
 	if (value != value || value < 0 || value > 127)
 		std::cout << "char: impossible" << std::endl;
@@ -125,4 +122,14 @@ void ScalarConverter::convert(std::string const &literal)
 	if (value == static_cast<int>(value) && value == value)
 		std::cout << ".0";
 	std::cout << std::endl;
+
+	// char c = static_cast<char>(value);
+	// int i = static_cast<int>(value);
+	// float f = static_cast<float>(value);
+	// double d = value;
+
+	// std::cout << "char: " << c << std::endl;
+	// std::cout << "int: " << i << std::endl;
+	// std::cout << "float: " << f << std::endl;
+	// std::cout << "double: " << d << std::endl;
 }
