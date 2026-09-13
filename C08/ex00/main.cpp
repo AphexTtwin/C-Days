@@ -18,7 +18,7 @@ int main()
 
 		it = easyfind(con, 30);
 
-		std::cout << "we found it -->  " << it.operator*() << std::endl;
+		std::cout << "we found it -->  " << *it << std::endl;
 
 		it = easyfind(con, 300);
 

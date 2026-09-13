@@ -2,7 +2,8 @@
 
 Span::Span()
 {
-
+	vi.reserve(0);
+	size = 0;
 }
 
 Span::Span(unsigned int n)

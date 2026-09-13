@@ -1,7 +1,7 @@
-NAME		= mutated
+NAME		= RPN
 CXX			= c++
 CXXFLAGS	= -Wall -Werror -Wextra -std=c++98
-SRC 		= main.cpp
+SRC 		= main.cpp RPN.cpp
 OBJ			= $(SRC:.cpp=.o)
 
 all: $(NAME)
